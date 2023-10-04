@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Admin from "scenes/admin";
+import Login from "scenes/login";
 import Dashboard from "scenes/dashboard";
 import Layout from "scenes/layout";
 import { themeSettings } from "theme";
@@ -17,11 +18,15 @@ function App() {
   return (
     <div className="app">
       <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={< Login/>} />
+        </Routes>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
             <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/api/auth/callback" element={<authCallBackPage />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/veiculos" element={<Vehicles />} />
               <Route path="/manutencao" element={<Maintenances />} />
