@@ -61,29 +61,26 @@ export const api = createApi({
     }),
 
 
-
     getVehicles: build.query({
-      query: ({ page, pageSize, sort, search }) => ({
+      query: () => ({
         url: "api/vehicles",
         method: "GET"
-        // ,
-        // params: { page, pageSize, sort, search },
       }),
       providesTags: ["Vehicles"],
     }),
+
     getMaintenances: build.query({
-      query: ({ page, pageSize, sort, search }) => ({
-        url: "client/transactions",
+      query: (id) => ({
+        url: "api/maintenances",
         method: "GET",
-        params: { page, pageSize, sort, search },
       }),
       providesTags: ["Maintenances"],
     }),
+
     getUsers: build.query({
-      query: ({ page, pageSize, sort, search }) => ({
+      query: (id) => ({
         url: "client/transactions",
         method: "GET",
-        params: { page, pageSize, sort, search },
       }),
       providesTags: ["Users"],
     }),

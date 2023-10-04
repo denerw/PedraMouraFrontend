@@ -4,8 +4,10 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useGetVehiclesQuery } from "state/api";
 import Header from "components/Header";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
-import { Form, Button } from 'react-bootstrap'; 
+import { Form, Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
+import axios from "axios";
+
 
 const Vehicles = () => {
   const theme = useTheme();
@@ -17,55 +19,7 @@ const Vehicles = () => {
   const [search, setSearch] = useState("");
 
   const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading } = useGetVehiclesQuery({
-    page,
-    pageSize,
-    sort: JSON.stringify(sort),
-    search,
-  });
-
-  // const { isLoading } = useGetVehiclesQuery({
-  //   page,
-  //   pageSize,
-  //   sort: JSON.stringify(sort),
-  //   search,
-  // });
-
-  // const data = [
-  //   { "_id": 1, "placa": "ABC-1234", "modelo": "Toyota Corolla", "tipo": "sedan", "quilometragem": 50000, "ano": 2018 },
-  //   { "_id": 2, "placa": "DEF-5678", "modelo": "Honda Civic", "tipo": "sedan", "quilometragem": 60000, "ano": 2019 },
-  //   { "_id": 3, "placa": "GHI-9012", "modelo": "Ford Focus", "tipo": "hatchback", "quilometragem": 45000, "ano": 2017 }];
-
-  // const columns = [
-  //   {
-  //     field: "_id",
-  //     headerName: "ID",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "userId",
-  //     headerName: "User ID",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "createdAt",
-  //     headerName: "CreatedAt",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "products",
-  //     headerName: "# of Products",
-  //     flex: 0.5,
-  //     sortable: false,
-  //     renderCell: (params) => params.value.length,
-  //   },
-  //   {
-  //     field: "cost",
-  //     headerName: "Cost",
-  //     flex: 1,
-  //     renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
-  //   },
-  // ];
+  const { data, isLoading, refetch } = useGetVehiclesQuery();
 
   const modalStyles = {
     content: {
@@ -76,7 +30,7 @@ const Vehicles = () => {
     }
   };
 
-  const [formData, setFormData] = useState({ placa: '', modelo: '', tipo: '', quilometragem: '', ano: '', });
+  const [formData, setFormData] = useState({ placa: '', modelo: '', tipo: '', quilometragem: '', ano: '', id: '' });
 
   const columns = [
     {
@@ -114,8 +68,14 @@ const Vehicles = () => {
   const [formValidated, setFormValidated] = useState(false);
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setFormData(
+      { placa: '', modelo: '', tipo: '', quilometragem: '', ano: '', id: '' }
+    );
+    setShow(false);
+  }
   const handleShow = () => setShow(true);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -132,20 +92,98 @@ const Vehicles = () => {
       e.preventDefault();
       e.stopPropagation();
     }
-    else{
-  
-      // Aqui você pode adicionar a lógica para lidar com os dados do formulário
-      console.log('Dados do formulário:', formData);
+    else {
+
+      create ? createVehiclePOST(formData) : editVehiclePUT(formData);
+      
       handleClose();
+      refetch();
     }
-    
+
     setFormValidated(true);
+  }
+
+  const createVehicleButton = () => {
+    setCreate(true);
+    handleShow();
+  }
+
+  const createVehiclePOST = (formData) => {
+    const newVehicle = {
+      plate: formData.placa,
+      model: formData.modelo,
+      vehType: formData.tipo,
+      space: '0',
+      currentKM: parseInt(formData.quilometragem),
+      year: parseInt(formData.ano),
+      isArchived: false,
+
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    // axios.post(`${baseURL}/api/vehicles`, { newVehicle }, config)
+    axios.post('http://localhost:3333/api/vehicles', newVehicle, config)
+      .then((response) => {
+        console.log('Resposta do servidor:', response.data);
+      })
+      .catch((error) => {
+        console.error('Erro na solicitação:', error);
+      });
+
+  }
+
+  const editVehiclePUT = (formData) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const editVehicleData = {
+      year : parseInt(formData.ano),
+      vehicleId  : formData.id,
+      model : formData.modelo,
+      plate : formData.placa,
+      newKm : parseInt(formData.quilometragem),
+      vehType : formData.tipo
+    };
+
+    // axios.post(`${baseURL}/api/vehicles`, { newVehicle }, config)
+    axios.put('http://localhost:3333/api/vehicles/update-vehicle', editVehicleData, config)
+      .then((response) => {
+        console.log('Resposta do servidor:', response.data);
+        console.log(editVehicleData)
+      })
+      .catch((error) => {
+        console.error('Erro na solicitação:', error);
+      });
+
+  }
+
+  const [create, setCreate] = useState(true);
+
+  const editVehicle = (row) => {
+    setCreate(false)
+    setFormData({
+      ano : row.year,
+      id : row.id,
+      modelo : row.model,
+      placa : row.plate,
+      quilometragem : row.currentKM,
+      tipo : row.vehType
+    });
+
+    handleShow();
   }
 
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="VEÍCULOS" subtitle="Lista completa de veículos" />
-      <Button onClick={handleShow}>CRIAR VEÍCULO</Button>
+      <Button onClick={createVehicleButton}>CRIAR VEÍCULO</Button>
       <Box
         height="80vh"
         sx={{
@@ -178,25 +216,26 @@ const Vehicles = () => {
           getRowId={(row) => row.id}
           rows={data || []}
           columns={columns}
+          onRowClick={(row) => editVehicle(row.row)}
         />
 
       </Box>
 
       <Modal show={show} onHide={handleClose} style={modalStyles}>
         <Modal.Header closeButton>
-          <Modal.Title>Novo Veiculo</Modal.Title>
+          <Modal.Title>Cadastro Veiculo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form noValidate validated={formValidated} onSubmit={handleSubmit}>
-          <Form.Group>
-            <Form.Label>Placa:</Form.Label>
-            <Form.Control
-              type="text"
-              name="placa"
-              value={formData.placa}
-              onChange={handleInputChange}
-              required
-            />
+            <Form.Group>
+              <Form.Label>Placa:</Form.Label>
+              <Form.Control
+                type="text"
+                name="placa"
+                value={formData.placa}
+                onChange={handleInputChange}
+                required
+              />
             </Form.Group>
             <Form.Group>
               <Form.Label>Modelo:</Form.Label>
@@ -238,7 +277,7 @@ const Vehicles = () => {
                 required
               />
             </Form.Group>
-            <Button variant="secondary" onClick={handleClose} style={{margin:'10px'}}>
+            <Button variant="secondary" onClick={handleClose} style={{ margin: '10px' }}>
               Close
             </Button>
             <Button type="submit" variant="primary">
