@@ -17,18 +17,55 @@ const Vehicles = () => {
   const [search, setSearch] = useState("");
 
   const [searchInput, setSearchInput] = useState("");
-
-  const { isLoading } = useGetVehiclesQuery({
+  const { data, isLoading } = useGetVehiclesQuery({
     page,
     pageSize,
     sort: JSON.stringify(sort),
     search,
   });
 
-  const data = [
-    { "id": 1, "placa": "ABC-1234", "modelo": "Toyota Corolla", "tipo": "sedan", "quilometragem": 50000, "ano": 2018 },
-    { "id": 2, "placa": "DEF-5678", "modelo": "Honda Civic", "tipo": "sedan", "quilometragem": 60000, "ano": 2019 },
-    { "id": 3, "placa": "GHI-9012", "modelo": "Ford Focus", "tipo": "hatchback", "quilometragem": 45000, "ano": 2017 }];
+  // const { isLoading } = useGetVehiclesQuery({
+  //   page,
+  //   pageSize,
+  //   sort: JSON.stringify(sort),
+  //   search,
+  // });
+
+  // const data = [
+  //   { "_id": 1, "placa": "ABC-1234", "modelo": "Toyota Corolla", "tipo": "sedan", "quilometragem": 50000, "ano": 2018 },
+  //   { "_id": 2, "placa": "DEF-5678", "modelo": "Honda Civic", "tipo": "sedan", "quilometragem": 60000, "ano": 2019 },
+  //   { "_id": 3, "placa": "GHI-9012", "modelo": "Ford Focus", "tipo": "hatchback", "quilometragem": 45000, "ano": 2017 }];
+
+  // const columns = [
+  //   {
+  //     field: "_id",
+  //     headerName: "ID",
+  //     flex: 1,
+  //   },
+  //   {
+  //     field: "userId",
+  //     headerName: "User ID",
+  //     flex: 1,
+  //   },
+  //   {
+  //     field: "createdAt",
+  //     headerName: "CreatedAt",
+  //     flex: 1,
+  //   },
+  //   {
+  //     field: "products",
+  //     headerName: "# of Products",
+  //     flex: 0.5,
+  //     sortable: false,
+  //     renderCell: (params) => params.value.length,
+  //   },
+  //   {
+  //     field: "cost",
+  //     headerName: "Cost",
+  //     flex: 1,
+  //     renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
+  //   },
+  // ];
 
   const modalStyles = {
     content: {
@@ -48,30 +85,30 @@ const Vehicles = () => {
       flex: 1,
     },
     {
-      field: "placa",
+      field: "plate",
       headerName: "Placa",
       flex: 1,
     },
     {
-      field: "modelo",
+      field: "model",
       headerName: "Modelo",
       flex: 1,
     },
     {
-      field: "tipo",
+      field: "vehType",
       headerName: "Tipo",
       flex: 1,
     },
     {
-      field: "quilometragem",
+      field: "currentKM",
       headerName: "Quilometragem",
       flex: 1,
     },
     {
-      field: "ano",
+      field: "year",
       headerName: "Ano",
       flex: 1,
-    }
+    },
   ];
 
   const [formValidated, setFormValidated] = useState(false);
@@ -139,25 +176,10 @@ const Vehicles = () => {
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row.id}
-          // rows={(data && data.transactions) || []}
-          rows={(data) || []}
+          rows={data || []}
           columns={columns}
-          rowCount={(data && data.total) || 0}
-          rowsPerPageOptions={[20, 50, 100]}
-          pagination
-          page={page}
-          pageSize={pageSize}
-          paginationMode="server"
-          sortingMode="server"
-          onPageChange={(newPage) => setPage(newPage)}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          onSortModelChange={(newSortModel) => setSort(...newSortModel)}
-          components={{ Toolbar: DataGridCustomToolbar }}
-          onRowClick={(modalData) => console.log(modalData)}
-          componentsProps={{
-            toolbar: { searchInput, setSearchInput, setSearch },
-          }}
         />
+
       </Box>
 
       <Modal show={show} onHide={handleClose} style={modalStyles}>
