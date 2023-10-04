@@ -17,24 +17,24 @@ const Vehicles = () => {
   const [search, setSearch] = useState("");
 
   const [searchInput, setSearchInput] = useState("");
-  // const { data, isLoading } = useGetVehiclesQuery({
-  //   page,
-  //   pageSize,
-  //   sort: JSON.stringify(sort),
-  //   search,
-  // });
-
-  const { isLoading } = useGetVehiclesQuery({
+  const { data, isLoading } = useGetVehiclesQuery({
     page,
     pageSize,
     sort: JSON.stringify(sort),
     search,
   });
 
-  const data = [
-    { "_id": 1, "placa": "ABC-1234", "modelo": "Toyota Corolla", "tipo": "sedan", "quilometragem": 50000, "ano": 2018 },
-    { "_id": 2, "placa": "DEF-5678", "modelo": "Honda Civic", "tipo": "sedan", "quilometragem": 60000, "ano": 2019 },
-    { "_id": 3, "placa": "GHI-9012", "modelo": "Ford Focus", "tipo": "hatchback", "quilometragem": 45000, "ano": 2017 }];
+  // const { isLoading } = useGetVehiclesQuery({
+  //   page,
+  //   pageSize,
+  //   sort: JSON.stringify(sort),
+  //   search,
+  // });
+
+  // const data = [
+  //   { "_id": 1, "placa": "ABC-1234", "modelo": "Toyota Corolla", "tipo": "sedan", "quilometragem": 50000, "ano": 2018 },
+  //   { "_id": 2, "placa": "DEF-5678", "modelo": "Honda Civic", "tipo": "sedan", "quilometragem": 60000, "ano": 2019 },
+  //   { "_id": 3, "placa": "GHI-9012", "modelo": "Ford Focus", "tipo": "hatchback", "quilometragem": 45000, "ano": 2017 }];
 
   // const columns = [
   //   {
@@ -165,8 +165,8 @@ const Vehicles = () => {
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row._id}
-          // rows={(data && data.transactions) || []}
-          rows={(data) || []}
+          rows={(data && data.transactions) || []}
+          // rows={(data) || []}
           columns={columns}
           rowCount={(data && data.total) || 0}
           rowsPerPageOptions={[20, 50, 100]}
@@ -184,6 +184,7 @@ const Vehicles = () => {
             toolbar: { searchInput, setSearchInput, setSearch },
           }}
         />
+
       </Box>
 
       <Modal isOpen={modalIsOpen} onRequestClose={fecharModal} style={modalStyles} // Aplica os estilos definidos acima à modal       
