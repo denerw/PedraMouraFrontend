@@ -3,8 +3,6 @@ import './style.scss'
 import logoGoogle from '../../assets/google-icon.svg'
 import logoGitHub from '../../assets/github-icon.png'
 import logoPedraMoura from '../../assets/pedramoura_full_logo.png'
-import axios from 'axios'
-
 
 
 

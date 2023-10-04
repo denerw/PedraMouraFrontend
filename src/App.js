@@ -26,7 +26,9 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route element={<Layout />}>
+              <Route path="/api/auth/google/callback" element={""} />
               <Route path="/api/auth/callback" element={<authCallBackPage />} />
+              
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/veiculos" element={<Vehicles />} />
               <Route path="/manutencao" element={<Maintenances />} />

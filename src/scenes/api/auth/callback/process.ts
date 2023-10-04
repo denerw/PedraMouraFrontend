@@ -6,8 +6,7 @@ const AuthCallBack = async (req: NextRequest) => {
 
     const { searchParams } = new URL(req.url);
     const code = searchParams.get('code');
-    
-    const registerReponse = await api.post('/api/register', {
+    const registerReponse = await api.post('/api/github/authentication/', {
         code
     })
 
