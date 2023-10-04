@@ -7,7 +7,7 @@ import globalReducer from "state";
 import { Provider } from "react-redux";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { api } from "state/api";
-import Modal from 'react-modal';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const store = configureStore({
   reducer: {
@@ -18,7 +18,6 @@ const store = configureStore({
 });
 setupListeners(store.dispatch);
 
-Modal.setAppElement('#root');
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
