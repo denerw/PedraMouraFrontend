@@ -55,28 +55,33 @@ const Maintenances = () => {
 
   const columns = [
     {
-      field: "plateNumber",
-      headerName: "Placa",
-      flex: 1,
-    },
-    {
-      field: "model",
-      headerName: "Modelo",
-      flex: 1,
-    },
-    {
-      field: "cost",
-      headerName: "Custo(R$)",
-      flex: 1,
-    },
-    {
-      field: "mileage",
-      headerName: "Quilometragem",
+      field: "id",
+      headerName: "ID",
       flex: 1,
     },
     {
       field: "date",
       headerName: "Data",
+      flex: 1,
+    },
+    {
+      field: "vehKm",
+      headerName: "Quilometragem",
+      flex: 1,
+    },
+    {
+      field: "mainType",
+      headerName: "Tipo",
+      flex: 1,
+    },
+    {
+      field: "totalAmount",
+      headerName: "Custo(R$)",
+      flex: 1,
+    },
+    {
+      field: "vehicleId",
+      headerName: "ID do veículo",
       flex: 1,
     },
   ];
