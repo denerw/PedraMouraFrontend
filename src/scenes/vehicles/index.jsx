@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Box, Button, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetVehiclesQuery } from "state/api";
 import Header from "components/Header";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
-
-import Modal from 'react-modal';
+import { Form, Button } from 'react-bootstrap'; 
+import Modal from 'react-bootstrap/Modal';
 
 const Vehicles = () => {
   const theme = useTheme();
@@ -69,8 +69,7 @@ const Vehicles = () => {
 
   const modalStyles = {
     content: {
-      backgroundColor: 'purple', // Define a cor de fundo da modal como roxa     
-      width: '500px', // Define a largura da modal     
+      backgroundColor: theme.palette.background.alt, // Define a cor de fundo da modal como roxa     
       margin: 'auto', // Centraliza a modal horizontalmente     
       borderRadius: '10px', // Adiciona cantos arredondados    
       padding: '20px', // Adiciona espaço interno   
@@ -80,7 +79,6 @@ const Vehicles = () => {
   const [formData, setFormData] = useState({ placa: '', modelo: '', tipo: '', quilometragem: '', ano: '', });
 
   const columns = [
-
     {
       field: "id",
       headerName: "ID",
@@ -113,15 +111,41 @@ const Vehicles = () => {
     },
   ];
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [formValidated, setFormValidated] = useState(false);
+  const [show, setShow] = useState(false);
 
-  const abrirModal = () => { setModalIsOpen(true); }
-  const fecharModal = () => { setModalIsOpen(false); }
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    else{
+  
+      // Aqui você pode adicionar a lógica para lidar com os dados do formulário
+      console.log('Dados do formulário:', formData);
+      handleClose();
+    }
+    
+    setFormValidated(true);
+  }
 
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="VEÍCULOS" subtitle="Lista completa de veículos" />
-      <Button onClick={abrirModal}>CRIAR VEÍCULO</Button>
+      <Button onClick={handleShow}>CRIAR VEÍCULO</Button>
       <Box
         height="80vh"
         sx={{
@@ -158,36 +182,70 @@ const Vehicles = () => {
 
       </Box>
 
-      <Modal isOpen={modalIsOpen} onRequestClose={fecharModal} style={modalStyles} // Aplica os estilos definidos acima à modal       
-        contentLabel="Nova Modal de Veículo"   >
-        <h2>Novo Veículo</h2>
-        {/* <form onSubmit={handleSubmit}> */}
-        <form>
-          <div>
-            <label htmlFor="placa">Placa:</label>
-            <input type="text" id="placa" name="placa"
-              value={formData.placa}/>
-          </div>
-          <div>
-            <label htmlFor="modelo">Modelo:</label>
-            <input
-              type="text" id="modelo" name="modelo" value={formData.modelo}  required />
-          </div>
-          <div>
-            <label htmlFor="tipo">Tipo:</label>
-            <input type="text" id="tipo" name="tipo" value={formData.tipo}  required />
-          </div>
-          <div>
-            <label htmlFor="quilometragem">Quilometragem:</label>
-            <input type="text" id="quilometragem" name="quilometragem" value={formData.quilometragem}  required />
-          </div>
-          <div>
-            <label htmlFor="ano">Ano:</label>
-            <input type="text" id="ano" name="ano" value={formData.ano}  required />
-          </div>
-          <button type="submit">Salvar</button>
-        </form>
-        <button onClick={fecharModal}>Fechar Modal</button>
+      <Modal show={show} onHide={handleClose} style={modalStyles}>
+        <Modal.Header closeButton>
+          <Modal.Title>Novo Veiculo</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form noValidate validated={formValidated} onSubmit={handleSubmit}>
+          <Form.Group>
+            <Form.Label>Placa:</Form.Label>
+            <Form.Control
+              type="text"
+              name="placa"
+              value={formData.placa}
+              onChange={handleInputChange}
+              required
+            />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Modelo:</Form.Label>
+              <Form.Control
+                type="text"
+                name="modelo"
+                value={formData.modelo}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Tipo:</Form.Label>
+              <Form.Control
+                type="text"
+                name="tipo"
+                value={formData.tipo}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Quilometragem:</Form.Label>
+              <Form.Control
+                type="text"
+                name="quilometragem"
+                value={formData.quilometragem}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Ano:</Form.Label>
+              <Form.Control
+                type="text"
+                name="ano"
+                value={formData.ano}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+            <Button variant="secondary" onClick={handleClose} style={{margin:'10px'}}>
+              Close
+            </Button>
+            <Button type="submit" variant="primary">
+              Save
+            </Button>
+          </Form>
+        </Modal.Body>
       </Modal>
     </Box>
   );
