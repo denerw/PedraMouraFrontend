@@ -10,7 +10,8 @@ export const api = createApi({
     "Dashboard",
     "Vehicles",
     "Maintenances",
-    "Users"
+    "Users",
+    "MonthlyCost",
   ],
   endpoints: (build) => ({
     getUser: build.query({
@@ -29,10 +30,21 @@ export const api = createApi({
       query: (id) => `management/performance/${id}`,
       providesTags: ["Performance"],
     }),
+
+    
+
+
     getDashboard: build.query({
       query: () => "general/dashboard",
       providesTags: ["Dashboard"],
     }),
+
+    getMonthlyCost: build.query({
+      query: () => "api/maintenance/get-monthly-cost",
+      providesTags: ["MonthlyCost"],
+    }),
+
+
     getVehicles: build.query({
       query: () => ({
         url: "api/vehicles",
@@ -42,7 +54,7 @@ export const api = createApi({
     }),
     getMaintenances: build.query({
       query: (id) => ({
-        url: "api/maintenances",
+        url: "api/maintenance/get-maintenance-all-vehicle",
         method: "GET",
       }),
       providesTags: ["Maintenances"],
@@ -65,4 +77,5 @@ export const {
   useGetVehiclesQuery,
   useGetMaintenancesQuery,
   useGetUsersQuery,
+  useGetMonthlyCostQuery,
 } = api;
