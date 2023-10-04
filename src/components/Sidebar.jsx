@@ -1,4 +1,13 @@
-import React from "react";
+import {
+  AdminPanelSettingsOutlined,
+  ChevronLeft,
+  ChevronRightOutlined,
+  DashboardOutlined,
+  HandymanOutlined,
+  HomeOutlined,
+  LocalShippingOutlined,
+  SettingsOutlined
+} from "@mui/icons-material";
 import {
   Box,
   Divider,
@@ -12,112 +21,50 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import {
-  SettingsOutlined,
-  ChevronLeft,
-  ChevronRightOutlined,
-  HomeOutlined,
-  DashboardOutlined,
-  LocalShippingOutlined,
-  HandymanOutlined,
-  ShoppingCartOutlined,
-  Groups2Outlined,
-  ReceiptLongOutlined,
-  PublicOutlined,
-  PointOfSaleOutlined,
-  TodayOutlined,
-  CalendarMonthOutlined,
-  AdminPanelSettingsOutlined,
-  TrendingUpOutlined,
-  PieChartOutlined,
-} from "@mui/icons-material";
+import pedramoura from "assets/pedramoura.jpeg";
+import profileImage from "assets/profile.jpeg";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { removeAccents } from "utils/textUtils";
 import FlexBetween from "./FlexBetween";
-import profileImage from "assets/profile.jpeg";
-import pedramoura from "assets/pedramoura.jpeg";
 
 const navItems = [
   {
     text: "Página Inicial",
+    path: '',
     icon: <HomeOutlined />,
   },
   {
     text: "CONTROLE DE VEÍCULOS",
+    path : null,
     icon: null,
   },
   {
     text: "Dashboard",
+    path : 'dashboard',
     icon: <DashboardOutlined />,
   },
   {
     text: "Veículos",
+    path : 'veiculos',
     icon: <LocalShippingOutlined />,
   },
   {
     text: "Manutenção",
+    path : 'manutencao',
     icon: <HandymanOutlined />,
   },
   {
-    text: "LOJA VIRTUAL",
-    icon: null,
-  },
-  {
-    // text: "Products",
-    text: "Produtos",
-    icon: <ShoppingCartOutlined />,
-  },
-  {
-    text: "Customers",
-    // text: "Clientes",
-    icon: <Groups2Outlined />,
-  },
-  // {
-  //   text: "Transactions",
-  //   icon: <ReceiptLongOutlined />,
-  // },
-  // {
-  //   text: "Geography",
-  //   icon: <PublicOutlined />,
-  // },
-  {
-    // text: "Sales",
-    text: "VENDAS",
-    icon: null,
-  },
-  {
-    // text: "Overview",
-    text: "Visão Geral",
-    icon: <PointOfSaleOutlined />,
-  },
-  {
-    // text: "Daily",
-    text: "Diário",
-    icon: <TodayOutlined />,
-  },
-  {
-    // text: "Monthly",
-    text: "Mensal",
-    icon: <CalendarMonthOutlined />,
-  },
-  // {
-  //   text: "Breakdown",
-  //   icon: <PieChartOutlined />,
-  // },
-  {
     text: "GERENCIAMENTO",
+    path : null,
     icon: null,
   },
   {
     // text: "Admin",
     text: "Administração",
+    path : 'admin',
     icon: <AdminPanelSettingsOutlined />,
-  },
-  {
-    // text: "Performance",
-    text: "Desempenho",
-    icon: <TrendingUpOutlined />,
-  },
+  }
 ];
 
 const Sidebar = ({
@@ -180,7 +127,7 @@ const Sidebar = ({
               </FlexBetween>
             </Box>
             <List>
-              {navItems.map(({ text, icon }) => {
+              {navItems.map(({ text, path, icon }) => {
                 if (!icon) {
                   return (
                     <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
@@ -188,13 +135,14 @@ const Sidebar = ({
                     </Typography>
                   );
                 }
-                const lcText = text.toLowerCase();
+
+                const lcText = removeAccents(text.toLowerCase());
 
                 return (
                   <ListItem key={text} disablePadding>
                     <ListItemButton
                       onClick={() => {
-                        navigate(`/${lcText}`);
+                        navigate(`/${path}`);
                         setActive(lcText);
                       }}
                       sx={{
