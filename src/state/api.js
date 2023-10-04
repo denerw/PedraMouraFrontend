@@ -5,15 +5,9 @@ export const api = createApi({
   reducerPath: "adminApi",
   tagTypes: [
     "User",
-    "Products",
-    "Customers",
-    "Transactions",
-    "Geography",
-    "Sales",
     "Admins",
-    "Performance",
+    "Sales",
     "Dashboard",
-
     "Vehicles",
     "Maintenances",
     "Users"
@@ -22,26 +16,6 @@ export const api = createApi({
     getUser: build.query({
       query: (id) => `general/user/${id}`,
       providesTags: ["User"],
-    }),
-    getProducts: build.query({
-      query: () => "client/products",
-      providesTags: ["Products"],
-    }),
-    getCustomers: build.query({
-      query: () => "client/customers",
-      providesTags: ["Customers"],
-    }),
-    getTransactions: build.query({
-      query: ({ page, pageSize, sort, search }) => ({
-        url: "client/transactions",
-        method: "GET",
-        params: { page, pageSize, sort, search },
-      }),
-      providesTags: ["Transactions"],
-    }),
-    getGeography: build.query({
-      query: () => "client/geography",
-      providesTags: ["Geography"],
     }),
     getSales: build.query({
       query: () => "sales/sales",
@@ -59,8 +33,6 @@ export const api = createApi({
       query: () => "general/dashboard",
       providesTags: ["Dashboard"],
     }),
-
-
     getVehicles: build.query({
       query: () => ({
         url: "api/vehicles",
@@ -68,7 +40,6 @@ export const api = createApi({
       }),
       providesTags: ["Vehicles"],
     }),
-
     getMaintenances: build.query({
       query: (id) => ({
         url: "api/maintenances",
@@ -76,7 +47,6 @@ export const api = createApi({
       }),
       providesTags: ["Maintenances"],
     }),
-
     getUsers: build.query({
       query: (id) => ({
         url: "client/transactions",
@@ -89,15 +59,9 @@ export const api = createApi({
 
 export const {
   useGetUserQuery,
-  useGetProductsQuery,
-  useGetCustomersQuery,
-  useGetTransactionsQuery,
-  useGetGeographyQuery,
   useGetSalesQuery,
   useGetAdminsQuery,
-  useGetUserPerformanceQuery,
   useGetDashboardQuery,
-
   useGetVehiclesQuery,
   useGetMaintenancesQuery,
   useGetUsersQuery,
