@@ -1,0 +1,72 @@
+#page-auth {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #cecece;
+
+    button{
+        width: 25rem;
+    }
+
+    a{
+        text-decoration: none;
+    }
+
+    .google-auth{
+        margin-top: 64px;
+        height: 50px;
+        border-radius: 8px;
+        font-weight: 500;
+        background: #ea4335;
+        color: #FFF;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        cursor: pointer;
+        border: 0;
+
+        transition: filter 0.2s;
+
+        > img {
+            margin-right: 8px;
+        }
+
+        &:hover{
+            filter: brightness(0.9)
+        }
+
+    }
+
+    .git-auth{
+        margin-top: 64px;
+        height: 50px;
+        border-radius: 8px;
+        font-weight: 500;
+        background: black;
+        color: #FFF;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        cursor: pointer;
+        border: 0;
+
+        transition: filter 0.2s;
+
+        > img {
+            margin-right: 8px;
+            height: 55%;
+        }
+
+        &:hover{
+            filter: brightness(0.9)
+        }
+    }
+
+}

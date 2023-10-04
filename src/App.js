@@ -16,6 +16,7 @@ import Monthly from "scenes/monthly";
 import Breakdown from "scenes/breakdown";
 import Admin from "scenes/admin";
 import Performance from "scenes/performance";
+import Login from "scenes/login";
 
 import Vehicles from "scenes/vehicles"
 import Maintenances from "scenes/maintenances"
@@ -26,11 +27,15 @@ function App() {
   return (
     <div className="app">
       <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={< Login/>} />
+        </Routes>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
             <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/api/auth/callback" element={<authCallBackPage />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/products" element={<Products />} />
               <Route path="/customers" element={<Customers />} />
