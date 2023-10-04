@@ -82,48 +82,35 @@ const Vehicles = () => {
   const columns = [
 
     {
-      field: "_id",
+      field: "id",
       headerName: "ID",
       flex: 1,
     },
     {
-      field: "placa",
+      field: "plate",
       headerName: "Placa",
       flex: 1,
     },
     {
-      field: "modelo",
+      field: "model",
       headerName: "Modelo",
       flex: 1,
     },
     {
-      field: "tipo",
+      field: "vehType",
       headerName: "Tipo",
       flex: 1,
     },
     {
-      field: "quilometragem",
+      field: "currentKM",
       headerName: "Quilometragem",
       flex: 1,
     },
     {
-      field: "ano",
+      field: "year",
       headerName: "Ano",
       flex: 1,
     },
-    // {
-    //   field: "products",
-    //   headerName: "# of Products",
-    //   flex: 0.5,
-    //   sortable: false,
-    //   renderCell: (params) => params.value.length,
-    // },
-    // {
-    //   field: "cost",
-    //   headerName: "Cost",
-    //   flex: 1,
-    //   renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
-    // },
   ];
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -164,25 +151,9 @@ const Vehicles = () => {
       >
         <DataGrid
           loading={isLoading || !data}
-          getRowId={(row) => row._id}
-          rows={(data && data.transactions) || []}
-          // rows={(data) || []}
+          getRowId={(row) => row.id}
+          rows={data || []}
           columns={columns}
-          rowCount={(data && data.total) || 0}
-          rowsPerPageOptions={[20, 50, 100]}
-          pagination
-          page={page}
-          pageSize={pageSize}
-          paginationMode="server"
-          sortingMode="server"
-          onPageChange={(newPage) => setPage(newPage)}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          onSortModelChange={(newSortModel) => setSort(...newSortModel)}
-          components={{ Toolbar: DataGridCustomToolbar }}
-          onRowClick={(modalData) => console.log(modalData)}
-          componentsProps={{
-            toolbar: { searchInput, setSearchInput, setSearch },
-          }}
         />
 
       </Box>
