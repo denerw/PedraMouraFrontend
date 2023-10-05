@@ -1,14 +1,19 @@
-import React, { useState } from "react";
 import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useGetMaintenancesQuery } from "state/api";
 import Header from "components/Header";
+import { useEffect, useState } from "react";
+import { useGetMaintenancesQuery } from "state/api";
 import { Form, Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import axios from "axios";
 
 
 const Maintenances = () => {
+
+  useEffect(() => {
+    console.log(localStorage.getItem('accessToken'));
+  }, [])
+
   const theme = useTheme();
 
   const { data, isLoading, refetch } = useGetMaintenancesQuery();
@@ -21,10 +26,10 @@ const Maintenances = () => {
 
   const modalStyles = {
     content: {
-      backgroundColor: theme.palette.background.alt, // Define a cor de fundo da modal como roxa     
-      margin: 'auto', // Centraliza a modal horizontalmente     
-      borderRadius: '10px', // Adiciona cantos arredondados    
-      padding: '20px', // Adiciona espaço interno   
+      backgroundColor: theme.palette.background.alt, // Define a cor de fundo da modal como roxa
+      margin: 'auto', // Centraliza a modal horizontalmente
+      borderRadius: '10px', // Adiciona cantos arredondados
+      padding: '20px', // Adiciona espaço interno
     }
   };
 

@@ -11,6 +11,7 @@ import { themeSettings } from "theme";
 
 import Maintenances from "scenes/maintenances";
 import Vehicles from "scenes/vehicles";
+import AuthCallBackPage from "scenes/api/auth/callback";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -27,8 +28,8 @@ function App() {
           <Routes>
             <Route element={<Layout />}>
               <Route path="/api/auth/google/callback" element={""} />
-              <Route path="/api/auth/callback" element={<authCallBackPage />} />
-              
+              <Route path="/api/auth/callback" element={<AuthCallBackPage />} />
+
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/veiculos" element={<Vehicles />} />
               <Route path="/manutencao" element={<Maintenances />} />

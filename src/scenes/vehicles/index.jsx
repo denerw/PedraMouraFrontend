@@ -1,14 +1,14 @@
-import React, { useState } from "react";
 import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useGetVehiclesQuery } from "state/api";
-import Header from "components/Header";
-import { Form, Button } from 'react-bootstrap';
-import Modal from 'react-bootstrap/Modal';
 import axios from "axios";
-
+import Header from "components/Header";
+import { useState } from "react";
+import { Button, Form } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import { useGetVehiclesQuery } from "state/api";
 
 const Vehicles = () => {
+
   const theme = useTheme();
 
   const { data, isLoading, refetch } = useGetVehiclesQuery();
