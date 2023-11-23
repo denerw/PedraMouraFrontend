@@ -1,27 +1,129 @@
 import React, { useMemo } from "react";
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
-import { useGetMonthlyCostQuery } from "state/api";
+import { useGetMaintenancesQuery } from "state/api"; //BACKEND REAL
+// import { useGetMonthlyCostQuery } from "state/api"; //BACKEND MOCK
 
 
 const OverviewChart = ({ isDashboard = false, view }) => {
   const theme = useTheme();
   
-  const { data, isLoading } = useGetMonthlyCostQuery(); //PEDRAMOURA
+  const { data, isLoading } = useGetMaintenancesQuery(); //BACKEND REAL
+  // const { data, isLoading } = useGetMonthlyCostQuery(); //BACKEND MOCK
+
+
+  //BACKEND REAL
+  const calcularSomatorioPorMes =  useMemo(() => {
+    const somatorioPorMes = {
+      "Jan": 0,
+      "Fev": 0,
+      "Mar": 0,
+      "Abr": 0,
+      "Mai": 0,
+      "Jun": 0,
+      "Jul": 0,
+      "Ago": 0,
+      "Sep": 0,
+      "Out": 0,
+      "Nov": 0,
+      "Dez": 0,
+    };
+    
+    
+    if(!data) return 0
+
+    data.forEach(item => {
+      const data = new Date(item.date);
+      // const mes = data.getMonth() + 1; // +1 porque os meses em JavaScript são baseados em zero (janeiro = 0, fevereiro = 1, etc.)
+      const mes = data.getDate();  //getDate pega o dia, mas por causa do formato USA está pegando o mês
+      const ano = data.getFullYear();
+
+      // const chave = `${ano}-${mes}`;
+      let chave;
+      switch (mes) {
+        case 1:
+          chave = 'Jan'
+          break;
+        case 2:
+          chave = 'Fev'
+          break;
+        case 3:
+          chave =  'Mar'
+          break;
+        case 4:
+          chave =  'Abr'
+          break;
+        case 5:
+          chave =  'Mai'
+          break;
+        case 6:
+          chave =  'Jun'
+          break;
+        case 7:
+          chave = 'Jul'
+          break;
+        case 8:
+          chave = 'Ago'
+          break;
+        case 9:
+          chave = 'Set'
+          break;
+        case 10:
+          chave = 'Out'
+          break;
+        case 11:
+          chave = 'Nov'
+          break;
+        case 12:
+          chave = 'Dez'
+          break;
+        default:
+          break;
+      }
+  
+      if (!somatorioPorMes[chave]) {
+        somatorioPorMes[chave] = 0;
+      }
+  
+      somatorioPorMes[chave] += item.totalAmout;
+    });
+  
+    const resultado = [];
+  
+    for (const chave in somatorioPorMes) {
+      if (somatorioPorMes.hasOwnProperty(chave)) {
+        resultado.push({ x: chave, y: somatorioPorMes[chave] });
+      }
+    }
+  
+    console.log(somatorioPorMes)
+    return JSON.parse(JSON.stringify(resultado));
+  }, [data]);
 
   const dataToPlot = useMemo(() => {   
-    if (!data) return [];
-
     const dados = [
       {
       id: 'series-1',
-      data : data,
+      data : calcularSomatorioPorMes,
       },
     ]
     return dados
   }, [data]);
 
-  if (!data || isLoading) return "Loading...";
+
+  //BACKEND MOCK
+  // const dataToPlot = useMemo(() => {   
+  //   const dados = [
+  //     {
+  //     id: 'series-1',
+  //     data : data,
+  //     },
+  //   ]
+  //   return dados
+  // }, [data]);
+
+   if (!data || isLoading) return "Loading...";
+
 
   return (
     <ResponsiveLine
@@ -94,8 +196,8 @@ const OverviewChart = ({ isDashboard = false, view }) => {
         tickPadding: 5,
         tickRotation: 0,
         legend: isDashboard
-          ? ""
-          : `Total ${view === "sales" ? "Revenue" : "Units"} for Year`,
+          ? "" : "Custo total de manutenção em reais (R$)",
+          // : `Total ${view === "sales" ? "Revenue" : "Units"} for Year`,
         legendOffset: -60,
         legendPosition: "middle",
       }}

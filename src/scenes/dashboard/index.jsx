@@ -21,8 +21,8 @@ const Dashboard = () => {
 
 
   const custoMensalMedio = useMemo(() => {   
-    return (!data) ? 0 : data.reduce((accumulator, currentItem) => {
-           return parseFloat(((accumulator + currentItem.totalAmout)/12).toFixed(2)); }, 0);;
+    return (!data) ? 0 : ((data.reduce((accumulator, currentItem) => {
+           return parseFloat(accumulator + currentItem.totalAmout) }, 0))/12).toFixed(2)
   }, [data]);
 
   const numeroManutencoes = useMemo(() => {   
@@ -88,7 +88,7 @@ const Dashboard = () => {
           borderRadius="0.55rem"
         >
           
-        <OverviewChart view="sales" isDashboard={true} />
+        <OverviewChart view="sales" isDashboard={false} />
         </Box>
 
         <Box
