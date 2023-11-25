@@ -19,10 +19,9 @@ const store = configureStore({
 });
 setupListeners(store.dispatch);
 
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <GoogleOAuthProvider clientId="66693955179-sju0tjl5v63mqigbp4cjirechl05g6i4.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID} >
     <React.StrictMode>
       <Provider store={store}>
         <App />

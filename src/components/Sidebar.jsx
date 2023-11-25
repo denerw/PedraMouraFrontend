@@ -1,5 +1,4 @@
 import {
-  AdminPanelSettingsOutlined,
   ChevronLeft,
   ChevronRightOutlined,
   DashboardOutlined,
@@ -53,17 +52,6 @@ const navItems = [
     text: "Manutenção",
     path : 'manutencao',
     icon: <HandymanOutlined />,
-  },
-  {
-    text: "GERENCIAMENTO",
-    path : null,
-    icon: null,
-  },
-  {
-    // text: "Admin",
-    text: "Administração",
-    path : 'admin',
-    icon: <AdminPanelSettingsOutlined />,
   }
 ];
 

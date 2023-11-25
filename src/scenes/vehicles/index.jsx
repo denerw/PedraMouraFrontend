@@ -119,7 +119,7 @@ const Vehicles = () => {
     }
 
     // axios.post(`${baseURL}/api/vehicles`, { newVehicle }, config)
-    axios.post('http://localhost:3333/api/vehicles', newVehicle, config)
+    axios.post(`${process.env.REACT_APP_MAIN_API}/vehicles`, newVehicle, config)
       .then((response) => {
         console.log('Resposta do servidor:', response.data);
       })
@@ -157,7 +157,7 @@ const Vehicles = () => {
     };
 
     // axios.post(`${baseURL}/api/vehicles`, { newVehicle }, config)
-    axios.put('http://localhost:3333/api/vehicles/update-vehicle', editVehicleData, config)
+    axios.put(`${process.env.REACT_APP_MAIN_API}/vehicles/update-vehicle`, editVehicleData, config)
       .then((response) => {
         console.log('Resposta do servidor:', response.data);
         console.log(editVehicleData)
@@ -183,7 +183,7 @@ const Vehicles = () => {
     console.log(formData)
     console.log(deleteVehicleData)
     // axios.post(`${baseURL}/api/vehicles`, { newVehicle }, config)
-    axios.put('http://localhost:3333/api/vehicles/', deleteVehicleData, config)
+    axios.put(`${process.env.REACT_APP_MAIN_API}/vehicles/`, deleteVehicleData, config)
       .then((response) => {
         console.log('Resposta do servidor:', response.data);
       })

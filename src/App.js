@@ -3,7 +3,6 @@ import { createTheme } from "@mui/material/styles";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Admin from "scenes/admin";
 import Login from "scenes/login";
 import Dashboard from "scenes/dashboard";
 import Layout from "scenes/layout";
@@ -33,7 +32,6 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/veiculos" element={<Vehicles />} />
               <Route path="/manutencao" element={<Maintenances />} />
-              <Route path="/admin" element={<Admin />} />
             </Route>
           </Routes>
         </ThemeProvider>

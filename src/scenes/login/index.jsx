@@ -51,7 +51,7 @@ const Login = () => {
     }
 
     function authenticateApplicationApi(data) {
-        axios.post(`http://localhost:3333/api/google/authentication/token`, {
+        axios.post(`${process.env.REACT_APP_MAIN_API}/google/authentication/token`, {
             user: data
         }).then((response) => {
             if (response && response.data) {
