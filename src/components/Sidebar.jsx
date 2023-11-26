@@ -94,13 +94,14 @@ const Sidebar = ({
             <Box m="1.5rem 2rem 2rem 3rem">
               <FlexBetween color={theme.palette.secondary.main}>
                 <Box display="flex" alignItems="center" gap="0.5rem">
-                  <Typography variant="h5" fontWeight="bold">
+                  <Typography variant="h5" fontWeight="bold" >
                   <Box
                   component="img"
                   alt="PEDRAMOURA"
                   src={pedramoura}
                   height="26px"
                   width="26px"
+                  marginRight="5px"
                   borderRadius="50%"
                   sx={{ objectFit: "cover" }}
                   />
