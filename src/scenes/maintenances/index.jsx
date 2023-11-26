@@ -1,18 +1,18 @@
-import { Box, useTheme } from "@mui/material";
+import { Box, Button, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Header from "components/Header";
 import { useEffect, useState } from "react";
 import { useGetMaintenancesQuery } from "state/api";
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import axios from "axios";
 
 
 const Maintenances = () => {
 
-  useEffect(() => {
-    console.log(localStorage.getItem('accessToken'));
-  }, [])
+  // useEffect(() => {
+  //   console.log(localStorage.getItem('accessToken'));
+  // }, [])
 
   const theme = useTheme();
 
@@ -62,8 +62,8 @@ const Maintenances = () => {
       flex: 1,
     },
     {
-      field: "vehicleId",
-      headerName: "ID do veículo",
+      field: "plate",
+      headerName: "Placa",
       flex: 1,
     },
   ];
@@ -111,22 +111,24 @@ const Maintenances = () => {
     handleShow();
   }
 
-  const createMaintenancePOST = (formData) => {
+  const createMaintenancePOST = async (formData) => {
     const newMaintenance = {
       date: formData.data,
       vehKm: parseInt(formData.quilometragem),
       mainType: formData.tipo,
       totalAmout: parseInt(formData.custo),
-      vehicleId: formData.veiculoid,
+      plate: formData.placa,
     }
 
     // axios.post(`${baseURL}/api/vehicles`, { newVehicle }, config)
-    axios.post(`${process.env.REACT_APP_MAIN_API}/maintenance/register-maintenance`, newMaintenance, config)
+    await axios.post(`${process.env.REACT_APP_MAIN_API}/maintenance/register`, newMaintenance, config)
       .then((response) => {
         console.log('Resposta do servidor:', response.data);
       })
       .catch((error) => {
-        console.error('Erro na solicitação:', error);
+        console.log('Erro na solicitação:', error);
+        const { message } = error.response.data;
+        alert(message);
       });
 
   }
@@ -140,54 +142,43 @@ const Maintenances = () => {
       quilometragem: row.vehKm,
       tipo: row.mainType,
       custo: row.totalAmout,
-      veiculoid: row.vehicleId,
+      placa: row.plate,
+      id: row.id
     });
-    console.log(formData)
     handleShow();
   }
 
   const editMaintenancePUT = (formData) => {
 
     const editVehicleData = {
-      year: parseInt(formData.ano),
-      vehicleId: formData.id,
-      model: formData.modelo,
-      plate: formData.placa,
-      newKm: parseInt(formData.quilometragem),
-      vehType: formData.tipo
+      mainType: formData.tipo,
+      id: formData.id
     };
 
     // axios.post(`${baseURL}/api/vehicles`, { newVehicle }, config)
-    axios.put(`${process.env.REACT_APP_MAIN_API}/vehicles/update-vehicle`, editVehicleData, config)
+    axios.put(`${process.env.REACT_APP_MAIN_API}/maintenance/update`, editVehicleData, config)
       .then((response) => {
         console.log('Resposta do servidor:', response.data);
         console.log(editVehicleData)
       })
       .catch((error) => {
-        console.error('Erro na solicitação:', error);
+        console.log('Erro na solicitação:', error);
+        alert('Error ao editar manutenção');
       });
 
   }
 
 
-  const deleteButton = (formData) => {
-    const deleteMaintenanceData = {
-      year: parseInt(formData.ano),
-      vehicleId: formData.id,
-      model: formData.modelo,
-      plate: formData.placa,
-      newKm: parseInt(formData.quilometragem),
-      vehType: formData.tipo
-    };
-
-    // axios.post(`${baseURL}/api/vehicles`, { newVehicle }, config)
-    axios.delete(`${process.env.REACT_APP_MAIN_API}/vehicles/delete`, deleteMaintenanceData, config)
+  const deleteButton = () => {
+    axios.get(`${process.env.REACT_APP_MAIN_API}/maintenance/delete/${formData.id}`)
       .then((response) => {
         console.log('Resposta do servidor:', response.data);
-        console.log(deleteMaintenanceData)
+        handleClose();
+        refetch();
       })
       .catch((error) => {
         console.error('Erro na solicitação:', error);
+        alert('Error ao deletar manutenção');
       });
 
   }
@@ -195,7 +186,6 @@ const Maintenances = () => {
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="MANUTENÇÕES" subtitle="Lista completa de manutenções" />
-      <Button onClick={createButton}>CRIAR MANUTENÇÃO</Button>
       <Box
         height="80vh"
         sx={{
@@ -223,6 +213,25 @@ const Maintenances = () => {
           },
         }}
       >
+        <div style={{width: '100%', height: '48px'}}>
+          {theme.palette.mode === "dark" ? (
+            <Button
+              onClick={createButton} 
+              color="inherit"
+              style={{border: '1px solid black', float: 'right', backgroundColor: theme.palette.primary.dark}}
+            >
+              CRIAR MANUTENÇÃO
+            </Button>
+          ) : (
+            <Button
+              onClick={createButton} 
+              color="inherit"
+              style={{border: '1px solid black', float: 'right', backgroundColor: theme.palette.secondary[300]}}
+            >
+              CRIAR MANUTENÇÃO
+            </Button>
+          )}
+        </div>
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row.id}
@@ -233,74 +242,101 @@ const Maintenances = () => {
       </Box>
 
       <Modal show={show} onHide={handleClose} style={modalStyles}>
-        <Modal.Header closeButton>
-          {!create ?
-            <Modal.Title>Atualizar Manutenção</Modal.Title> : <Modal.Title>Cadastro Manutenção</Modal.Title>
-          }
-        </Modal.Header>
-        <Modal.Body>
+        <Modal.Header style={{backgroundColor: theme.palette.primary.light}} closeButton>
+            {!create 
+              ? <Modal.Title><Header title="ATUALIZAÇÃO DE MANUTENÇÃO" subtitle="Atualize a manutenção desejada abaixo"/></Modal.Title> 
+              : <Modal.Title><Header title="CADASTRO DE MANUTENÇÃO" subtitle="Cadastre a manutenção desejada abaixo"/></Modal.Title>
+            }
+        </Modal.Header >
+        <Modal.Body style={{backgroundColor: theme.palette.primary.light}}>
           <Form noValidate validated={formValidated} onSubmit={handleSubmit}>
             <Form.Group>
               <Form.Label>Data:</Form.Label>
               <Form.Control
-                type="text"
+                type="date"
                 name="data"
                 value={formData.data}
+                disabled={!create}
                 onChange={handleInputChange}
                 required
               />
             </Form.Group>
-            <Form.Group>
+            <Form.Group style={{marginTop: '10px'}}>
               <Form.Label>Quilometragem:</Form.Label>
               <Form.Control
                 type="text"
                 name="quilometragem"
                 value={formData.quilometragem}
+                disabled={!create}
                 onChange={handleInputChange}
                 required
               />
             </Form.Group>
-            <Form.Group>
+            <Form.Group style={{marginTop: '10px'}}>
               <Form.Label>Tipo:</Form.Label>
-              <Form.Control
-                type="text"
+              <Form.Select
                 name="tipo"
                 value={formData.tipo}
                 onChange={handleInputChange}
                 required
-              />
+              >
+                <option value=''>Selecione um tipo</option>
+                <option value="PREVENTIVA">Preventiva</option>
+                <option value="CORRETIVA">Corretiva</option>
+              </Form.Select>
             </Form.Group>
-            <Form.Group>
+            <Form.Group style={{marginTop: '10px'}}>
               <Form.Label>Custo(R$):</Form.Label>
               <Form.Control
-                type="text"
+                type="number"
+                step=".01"
+                disabled={!create}
                 name="custo"
                 value={formData.custo}
                 onChange={handleInputChange}
                 required
               />
             </Form.Group>
-            <Form.Group>
-              <Form.Label>ID do veículo:</Form.Label>
+            <Form.Group style={{marginTop: '10px'}}>
+              <Form.Label>Placa do veiculo:</Form.Label>
               <Form.Control
                 type="text"
-                name="veiculoid"
-                value={formData.veiculoid}
+                disabled={!create}
+                name="placa"
+                value={formData.placa}
                 onChange={handleInputChange}
                 required
               />
             </Form.Group>
-            <Button variant="secondary" onClick={handleClose} style={{ margin: '10px' }}>
-              Fechar
-            </Button>
-            <Button type="submit" variant="primary">
-              Salvar
-            </Button>
-            {!create ?
-              <Button variant="danger" onClick={deleteButton} style={{ margin: '10px' }}>
-                Excluir
-              </Button> : (<div></div>)
-            }
+            {theme.palette.mode === "dark" ? (
+              <div style={{width: '100%', height: '60px', paddingTop: '9px'}}>
+                  <Button variant="secondary" onClick={handleClose} style={{ margin: '10px', border: '1px solid black', backgroundColor: theme.palette.primary.dark }}>
+                    Cancelar
+                  </Button>
+                  <Button type="submit" variant="primary" style={{border: '1px solid black', float: 'right', margin: '10px', backgroundColor: theme.palette.primary.dark}} >
+                  Salvar
+                </Button>
+                {!create ?
+                  <Button  variant="danger" onClick={deleteButton} style={{ margin: '10px', border: '1px solid black', float: 'right', backgroundColor: theme.palette.primary.dark}}>
+                    Excluir
+                  </Button> : (<div></div>)
+                }
+              </div>
+            ) : (
+              <div style={{width: '100%', height: '60px', paddingTop: '9px'}}>
+                  <Button variant="secondary" onClick={handleClose} style={{ margin: '10px', border: '1px solid black', backgroundColor: theme.palette.secondary[300] }}>
+                    Cancelar
+                  </Button>
+                  <Button type="submit" variant="primary" style={{border: '1px solid black', float: 'right', margin: '10px', backgroundColor: theme.palette.secondary[300]}} >
+                  Salvar
+                </Button>
+                {!create ?
+                  <Button  variant="danger" onClick={deleteButton} style={{ margin: '10px', border: '1px solid black', float: 'right', backgroundColor: theme.palette.secondary[300] }}>
+                    Excluir
+                  </Button> : (<div></div>)
+                }
+              </div>
+            )}
           </Form>
         </Modal.Body>
       </Modal>
