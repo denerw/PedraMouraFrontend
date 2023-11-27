@@ -34,8 +34,8 @@ const OverviewChart = ({ isDashboard = false, view }) => {
 
     data.forEach(item => {
       const data = new Date(item.date);
-      // const mes = data.getMonth() + 1; // +1 porque os meses em JavaScript são baseados em zero (janeiro = 0, fevereiro = 1, etc.)
-      const mes = data.getDate();  //getDate pega o dia, mas por causa do formato USA está pegando o mês
+      const mes = data.getMonth() + 1; // +1 porque os meses em JavaScript são baseados em zero (janeiro = 0, fevereiro = 1, etc.)
+      // const mes = data.getDate();  //getDate pega o dia, mas por causa do formato USA está pegando o mês
       const ano = data.getFullYear();
 
       // const chave = `${ano}-${mes}`;
